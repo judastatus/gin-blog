@@ -1,0 +1,52 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "An example of gin",
+        "title": "Golang Gin API",
+        "termsOfService": "https://github.com/EDDYCJY/go-gin-example",
+        "contact": {},
+        "license": {
+            "name": "MIT"
+        },
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/v1/tags": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "新增文章标签",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Name",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "State",
+                        "name": "state",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "CreatedBy",
+                        "name": "created_by",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{},\"msg\":\"ok\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
