@@ -2,9 +2,9 @@ package gredis
 
 import (
 	"encoding/json"
+	"gin-blog/pkg/setting"
 	"github.com/gomodule/redigo/redis"
 	"time"
-	"gin-blog/pkg/setting"
 )
 
 var RedisConn *redis.Pool

@@ -85,8 +85,8 @@ func (t *Tag) GetAll() ([]models.Tag, error) {
 	if err != nil {
 		return nil, err
 	}
+	gredis.Set(key, tags, 3600 * 24)
 
-	gredis.Set(key, tags, 3600)
 	return tags, nil
 }
 

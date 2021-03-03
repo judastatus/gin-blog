@@ -39,6 +39,7 @@ func GetTags(c *gin.Context) {
 	}
 
 	tags, err := tagService.GetAll()
+	fmt.Println(tags)
 	if err != nil {
 		appG.Response(http.StatusInternalServerError, e.ERROR_GET_TAGS_FAIL, nil)
 		return
@@ -50,17 +51,16 @@ func GetTags(c *gin.Context) {
 		return
 	}
 
-	fmt.Println("countttttttttttt")
 	appG.Response(http.StatusOK, e.SUCCESS, map[string]interface{}{
 		"lists": tags,
 		"total": count,
 	})
 }
 
-type AddTagForm struct {
-	Name      string `form:"name" valid:"Required;MaxSize(100)"`
-	CreatedBy string `form:"created_by" valid:"Required;MaxSize(100)"`
-	State     int    `form:"state" valid:"Range(0,1)"`
+type AddTagStruct struct {
+	Name      string `form:"name" json:"name" valid:"Required;MaxSize(100)"`
+	CreatedBy string `form:"created_by" json:"created_by" valid:"Required;MaxSize(100)"`
+	State     int    `form:"state" json:"state" valid:"Range(0,1)"`
 }
 
 //新增文章标签
@@ -75,19 +75,19 @@ type AddTagForm struct {
 func AddTag(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
-		form AddTagForm
+		addTagStruct AddTagStruct
 	)
 
-	httpCode, errCode := app.BindAndValid(c, &form)
+	httpCode, errCode := app.BindJsonAndValid(c, &addTagStruct)
 	if errCode != e.SUCCESS {
 		appG.Response(httpCode, errCode, nil)
 		return
 	}
 
 	tagService := tag_service.Tag{
-		Name:      form.Name,
-		CreatedBy: form.CreatedBy,
-		State:     form.State,
+		Name:      addTagStruct.Name,
+		CreatedBy: addTagStruct.CreatedBy,
+		State:     addTagStruct.State,
 	}
 	exists, err := tagService.ExistByName()
 	if err != nil {
@@ -109,11 +109,11 @@ func AddTag(c *gin.Context) {
 }
 
 //修改文章标签
-type EditTagForm struct {
-	ID         int    `form:"id" valid:"Required;Min(1)"`
-	Name       string `form:"name" valid:"Required;MaxSize(100)"`
-	ModifiedBy string `form:"modified_by" valid:"Required;MaxSize(100)"`
-	State      int    `form:"state" valid:"Range(0,1)"`
+type EditTagStruct struct {
+	ID         int    `form:"id" json:"id" valid:"Required;Min(1)"`
+	Name       string `form:"name" json:"name" valid:"Required;MaxSize(100)"`
+	ModifiedBy string `form:"modified_by" json:"modified_by" valid:"Required;MaxSize(100)"`
+	State      int    `form:"state" json:"state" valid:"Range(0,1)"`
 }
 
 // @Summary Update article tag
@@ -128,20 +128,20 @@ type EditTagForm struct {
 func EditTag(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
-		form = EditTagForm{ID: com.StrTo(c.Param("id")).MustInt()}
+		editTagStruct = EditTagStruct{ID: com.StrTo(c.Param("id")).MustInt()}
 	)
 
-	httpCode, errCode := app.BindAndValid(c, &form)
+	httpCode, errCode := app.BindFormAndValid(c, &editTagStruct)
 	if errCode != e.SUCCESS {
 		appG.Response(httpCode, errCode, nil)
 		return
 	}
 
 	tagService := tag_service.Tag{
-		ID:         form.ID,
-		Name:       form.Name,
-		ModifiedBy: form.ModifiedBy,
-		State:      form.State,
+		ID:         editTagStruct.ID,
+		Name:       editTagStruct.Name,
+		ModifiedBy: editTagStruct.ModifiedBy,
+		State:      editTagStruct.State,
 	}
 
 	exists, err := tagService.ExistByID()

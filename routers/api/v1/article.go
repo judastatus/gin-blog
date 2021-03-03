@@ -142,7 +142,7 @@ func AddArticle(c *gin.Context) {
 		form AddArticleForm
 	)
 
-	httpCode, errCode := app.BindAndValid(c, &form)
+	httpCode, errCode := app.BindFormAndValid(c, &form)
 	if errCode != e.SUCCESS {
 		appG.Response(httpCode, errCode, nil)
 		return
@@ -208,7 +208,7 @@ func EditArticle(c *gin.Context) {
 		form = EditArticleForm{ID: com.StrTo(c.Param("id")).MustInt()}
 	)
 
-	httpCode, errCode := app.BindAndValid(c, &form)
+	httpCode, errCode := app.BindFormAndValid(c, &form)
 	if errCode != e.SUCCESS {
 		appG.Response(httpCode, errCode, nil)
 		return

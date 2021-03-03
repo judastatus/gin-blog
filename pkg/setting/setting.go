@@ -71,18 +71,25 @@ func Setup() {
 		log.Fatalf("Cfg.MapTo AppSetting err: %v", err)
 	}
 
-	AppSetting.ImageMaxSize = AppSetting.ImageMaxSize * 1024 * 1024
 
 	err = Cfg.Section("server").MapTo(ServerSetting)
 	if err != nil {
 		log.Fatalf("Cfg.MapTo ServerSetting err: %v", err)
 	}
 
-	ServerSetting.ReadTimeout = ServerSetting.ReadTimeout * time.Second
-	ServerSetting.WriteTimeout = ServerSetting.ReadTimeout * time.Second
-
 	err = Cfg.Section("database").MapTo(DatabaseSetting)
 	if err != nil {
 		log.Fatalf("Cfg.MapTo DatabaseSetting err: %v", err)
 	}
+
+	err = Cfg.Section("redis").MapTo(RedisSetting)
+	if err != nil {
+		log.Fatalf("Cfg.MapTo redis err: %v", err)
+	}
+
+	AppSetting.ImageMaxSize = AppSetting.ImageMaxSize * 1024 * 1024
+	ServerSetting.ReadTimeout = ServerSetting.ReadTimeout * time.Second
+	ServerSetting.WriteTimeout = ServerSetting.ReadTimeout * time.Second
+	RedisSetting.IdleTimeout = RedisSetting.IdleTimeout * time.Second
+
 }

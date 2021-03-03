@@ -8,8 +8,8 @@ import (
 	"gin-blog/pkg/e"
 )
 
-// BindAndValid binds and validates data
-func BindAndValid(c *gin.Context, form interface{}) (int, int) {
+// BindFormAndValid binds and validates data
+func BindFormAndValid(c *gin.Context, form interface{}) (int, int) {
 	err := c.Bind(form)
 	if err != nil {
 		return http.StatusBadRequest, e.INVALID_PARAMS
